@@ -1,3 +1,5 @@
+import 'package:fb_test2/screens/home/home.screen.dart';
+import 'package:fb_test2/services/user/user.service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,9 +17,12 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreen extends State<SignInScreen> {
   final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -29,7 +34,44 @@ class _SignInScreen extends State<SignInScreen> {
         child: Form(
           child: Column(
             children: [
-              TextFormField(decoration: InputDecoration(labelText: "Email")),
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(labelText: "Email"),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Email is required";
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: InputDecoration(labelText: "Password"),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Email is required";
+                  }
+                  return null;
+                },
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await UserService.instance.signIn(
+                      emailController.text,
+                      passwordController.text,
+                    );
+
+                    if (context.mounted) {
+                      HomeScreen.go(context);
+                    }
+                  } catch (error) {
+                    debugPrint(error.toString());
+                  }
+                },
+                child: Text("Submit"),
+              ),
             ],
           ),
         ),

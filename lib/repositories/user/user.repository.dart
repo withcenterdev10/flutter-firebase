@@ -14,6 +14,13 @@ class UserRepository {
     );
   }
 
+  Future<void> signIn(UserModel model) async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: model.email,
+      password: model.password,
+    );
+  }
+
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }

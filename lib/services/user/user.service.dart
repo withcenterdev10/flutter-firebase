@@ -9,6 +9,11 @@ class UserService {
 
   final UserRepository _repository = UserRepository.instance;
 
+  Future<void> signIn(String email, String password) async {
+    final model = UserModel(email: email, password: password);
+    await _repository.signIn(model);
+  }
+
   Future<void> signUp(String email, String password) async {
     final model = UserModel(email: email, password: password);
     await _repository.signUp(model);

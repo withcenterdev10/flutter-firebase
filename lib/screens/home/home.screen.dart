@@ -24,13 +24,13 @@ class HomeScreen extends StatelessWidget {
               // No user :<
               ElevatedButton(
                 onPressed: () {
-                  SignInScreen.go(context);
+                  SignInScreen.push(context);
                 },
                 child: Text("Sign In"),
               ),
               ElevatedButton(
                 onPressed: () {
-                  SignUpScreen.go(context);
+                  SignUpScreen.push(context);
                 },
                 child: Text("Sign Up"),
               ),
