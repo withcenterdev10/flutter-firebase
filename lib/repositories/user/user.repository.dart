@@ -13,4 +13,8 @@ class UserRepository {
       password: model.password,
     );
   }
+
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
 }

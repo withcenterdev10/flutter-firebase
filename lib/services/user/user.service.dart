@@ -13,4 +13,8 @@ class UserService {
     final model = UserModel(email: email, password: password);
     await _repository.signUp(model);
   }
+
+  Future<void> signOut() async {
+    await _repository.signOut();
+  }
 }
