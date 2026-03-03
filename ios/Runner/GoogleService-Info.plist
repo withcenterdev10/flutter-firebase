@@ -26,5 +26,7 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:184069743563:ios:fa9e95ba1d3ebc67ce4c4e</string>
+	<key>DATABASE_URL</key>
+	<string>https://fir-flutter-test-253fb-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

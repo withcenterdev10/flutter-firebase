@@ -19,6 +19,14 @@ class UserService {
     await _repository.signUp(model);
   }
 
+  Future<void> updateUser({
+    required String name,
+    required String nickname,
+  }) async {
+    final model = UserModel(name: name, nickname: nickname);
+    await _repository.updateUser(model);
+  }
+
   Future<void> signOut() async {
     await _repository.signOut();
   }

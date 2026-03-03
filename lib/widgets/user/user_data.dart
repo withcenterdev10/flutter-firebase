@@ -1,21 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class UserData extends StatelessWidget {
-  const UserData({super.key, required this.yes, this.no});
+  const UserData({super.key, required this.builder});
 
-  final Widget Function() yes;
-  final Widget Function()? no;
+  final Widget Function(BuildContext context, Map<String, dynamic>) builder;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
+      stream: FirebaseDatabase.instance
+          .ref('members')
+          .child(FirebaseAuth.instance.currentUser!.uid)
+          .onValue,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          return yes();
+          final data = (Map<String, dynamic>.from(
+            snapshot.data.snapshot.value ?? {},
+          ));
+
+          return builder(context, data);
         } else {
-          return no != null ? no!() : const SizedBox.shrink();
+          return builder(context, {});
         }
       },
     );

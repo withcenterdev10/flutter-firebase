@@ -57,7 +57,9 @@ class DefaultFirebaseOptions {
     appId: '1:184069743563:ios:fa9e95ba1d3ebc67ce4c4e',
     messagingSenderId: '184069743563',
     projectId: 'fir-flutter-test-253fb',
+    databaseURL: 'https://fir-flutter-test-253fb-default-rtdb.firebaseio.com',
     storageBucket: 'fir-flutter-test-253fb.firebasestorage.app',
     iosBundleId: 'com.ex.fbtest2.fbTest2',
   );
+
 }
