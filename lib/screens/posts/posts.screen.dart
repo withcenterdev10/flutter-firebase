@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:fb_test2/utils/database/database.util.dart';
-import 'package:fb_test2/widgets/user/posts/user.posts.dart';
-import 'package:fb_test2/widgets/user/user_ready.dart';
+import 'package:fb_test2/widgets/user/posts/user_posts.dart';
+import 'package:fb_test2/widgets/user/user.ready.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';

@@ -3,8 +3,8 @@ import 'package:fb_test2/screens/profile/profile.screen.dart';
 import 'package:fb_test2/screens/sign_in/sign_in.screen.dart';
 import 'package:fb_test2/screens/sign_up/sign_up.screen.dart';
 import 'package:fb_test2/services/user/user.service.dart';
-import 'package:fb_test2/widgets/user/user_data.dart';
-import 'package:fb_test2/widgets/user/user_ready.dart';
+import 'package:fb_test2/widgets/user/user.data.dart';
+import 'package:fb_test2/widgets/user/user.ready.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
