@@ -33,6 +33,7 @@ class UserPosts extends StatelessWidget {
             final temp = Map<String, String>.from(
               child.value as Map<dynamic, dynamic>,
             );
+            temp['id'] = child.key!;
             data.add(temp);
           }
 

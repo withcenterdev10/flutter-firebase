@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:fb_test2/utils/database/database.util.dart';
 import 'package:fb_test2/widgets/user/posts/user.posts.dart';
 import 'package:fb_test2/widgets/user/user_ready.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -33,11 +35,12 @@ class PostsScreen extends StatelessWidget {
                       children: [
                         ElevatedButton(
                           onPressed: () {
+                            // TO_DO : Move this to Repository
                             DatabaseReference postListRef = FirebaseDatabase
                                 .instance
-                                .ref("members")
-                                .child("cOqaUnIKgkWcKDPYXBalYsfoVVp2")
-                                .child("posts");
+                                .ref(Lists.members.name)
+                                .child(FirebaseAuth.instance.currentUser!.uid)
+                                .child(Lists.posts.name);
 
                             DatabaseReference newPostRef = postListRef.push();
                             newPostRef.update({
@@ -48,7 +51,27 @@ class PostsScreen extends StatelessWidget {
                         ),
 
                         ...posts.map((post) {
-                          return Text("Title: ${post['title']}");
+                          return Row(
+                            mainAxisSize: .min,
+                            children: [
+                              Text("Title: ${post['title']}"),
+                              IconButton(
+                                onPressed: () {
+                                  // TO_DO : Move this to Repository
+                                  // TO_DO : Use a model
+                                  FirebaseDatabase.instance
+                                      .ref(Lists.members.name)
+                                      .child(
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                      )
+                                      .child(Lists.posts.name)
+                                      .child(post['id']!)
+                                      .remove();
+                                },
+                                icon: Icon(Icons.delete),
+                              ),
+                            ],
+                          );
                         }),
                       ],
                     ),
