@@ -1,4 +1,5 @@
 import 'package:fb_test2/models/user/user.model.dart';
+import 'package:fb_test2/utils/database/database.util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class UserData extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseDatabase.instance
-          .ref('members')
+          .ref(References.members.name)
           .child(FirebaseAuth.instance.currentUser!.uid)
           .onValue,
       builder: (BuildContext context, AsyncSnapshot snapshot) {

@@ -1,4 +1,5 @@
 import 'package:fb_test2/models/user/user.model.dart';
+import 'package:fb_test2/utils/database/database.util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -24,10 +25,10 @@ class UserRepository {
 
   Future<void> updateUser(UserModel model) async {
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseDatabase.instance.ref('members').child(uid).update({
-      "name": model.name!,
-      "nickname": model.nickname!,
-    });
+    await FirebaseDatabase.instance
+        .ref(References.members.name)
+        .child(uid)
+        .update({"name": model.name!, "nickname": model.nickname!});
   }
 
   Future<void> signOut() async {

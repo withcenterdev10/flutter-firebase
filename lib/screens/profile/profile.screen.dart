@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fb_test2/models/user/user.model.dart';
 import 'package:fb_test2/screens/home/home.screen.dart';
 import 'package:fb_test2/services/user/user.service.dart';
+import 'package:fb_test2/utils/database/database.util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadUserData() async {
     final snapshot = await FirebaseDatabase.instance
-        .ref('members')
+        .ref(References.members.name)
         .child(FirebaseAuth.instance.currentUser!.uid)
         .get();
 
