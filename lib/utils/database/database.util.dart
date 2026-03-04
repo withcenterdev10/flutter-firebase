@@ -1,1 +1,1 @@
-enum References { members }
+enum Lists { members, posts }

@@ -1,3 +1,4 @@
+import 'package:fb_test2/screens/posts/posts.screen.dart';
 import 'package:fb_test2/screens/profile/profile.screen.dart';
 import 'package:fb_test2/screens/sign_in/sign_in.screen.dart';
 import 'package:fb_test2/screens/sign_up/sign_up.screen.dart';
@@ -54,6 +55,12 @@ class HomeScreen extends StatelessWidget {
                   ProfileScreen.push(context);
                 },
                 child: Text("Profile"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  PostsScreen.push(context);
+                },
+                child: Text("Fetch multiple data page"),
               ),
             ],
           ),

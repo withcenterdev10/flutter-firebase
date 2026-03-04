@@ -13,7 +13,7 @@ class UserData extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseDatabase.instance
-          .ref(References.members.name)
+          .ref(Lists.members.name)
           .child(FirebaseAuth.instance.currentUser!.uid)
           .onValue,
       builder: (BuildContext context, AsyncSnapshot snapshot) {

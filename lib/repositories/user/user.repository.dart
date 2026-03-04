@@ -25,10 +25,10 @@ class UserRepository {
 
   Future<void> updateUser(UserModel model) async {
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseDatabase.instance
-        .ref(References.members.name)
-        .child(uid)
-        .update({"name": model.name!, "nickname": model.nickname!});
+    await FirebaseDatabase.instance.ref(Lists.members.name).child(uid).update({
+      "name": model.name!,
+      "nickname": model.nickname!,
+    });
   }
 
   Future<void> signOut() async {

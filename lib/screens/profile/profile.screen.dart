@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadUserData() async {
     final snapshot = await FirebaseDatabase.instance
-        .ref(References.members.name)
+        .ref(Lists.members.name)
         .child(FirebaseAuth.instance.currentUser!.uid)
         .get();
 
