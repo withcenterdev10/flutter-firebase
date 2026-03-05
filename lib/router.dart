@@ -6,7 +6,7 @@ import 'package:fb_test2/screens/sign_up/sign_up.screen.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
-  initialLocation: PostsScreen.routeName,
+  initialLocation: HomeScreen.routeName,
   routes: [
     GoRoute(
       path: HomeScreen.routeName,

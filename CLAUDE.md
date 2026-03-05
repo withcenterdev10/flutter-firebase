@@ -56,7 +56,3 @@ This is a Flutter app using Firebase (Auth + Realtime Database) with `go_router`
 ### Routing
 
 All routes are defined in `lib/router.dart` using `GoRouter`. The initial route is `/posts`.
-
-### Known TODOs
-
-Several Firebase write operations in `PostsScreen` are marked `// TO_DO: Move this to Repository` — post creation, editing, and deletion are currently inline in the screen rather than in a repository.

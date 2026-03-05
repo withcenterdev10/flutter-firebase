@@ -1,14 +1,7 @@
-import 'dart:math';
-
-import 'package:fb_test2/utils/database/database.util.dart';
 import 'package:fb_test2/widgets/user/posts/user_posts.dart';
 import 'package:fb_test2/widgets/user/user.ready.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-final rand = Random();
 
 class PostsScreen extends StatelessWidget {
   const PostsScreen({super.key});
@@ -31,61 +24,24 @@ class PostsScreen extends StatelessWidget {
                 if (posts.isNotEmpty) {
                   return Center(
                     child: Column(
-                      mainAxisSize: .min,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            // TO_DO : Move this to Repository
-                            DatabaseReference postListRef = FirebaseDatabase
-                                .instance
-                                .ref(Lists.members.name)
-                                .child(FirebaseAuth.instance.currentUser!.uid)
-                                .child(Lists.posts.name);
-
-                            DatabaseReference newPostRef = postListRef.push();
-                            newPostRef.update({
-                              "title": "post title ${rand.nextInt(1000)}",
-                            });
-                          },
+                          onPressed: () {},
                           child: Text("Add random post"),
                         ),
 
                         ...posts.map((post) {
                           return Row(
-                            mainAxisSize: .min,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text("Title: ${post['title']}"),
                               IconButton(
-                                onPressed: () {
-                                  // TO_DO : Move this to Repository
-                                  // TO_DO : Use a model
-                                  FirebaseDatabase.instance
-                                      .ref(Lists.members.name)
-                                      .child(
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                      )
-                                      .child(Lists.posts.name)
-                                      .child(post['id']!)
-                                      .update({
-                                        "title":
-                                            "post title ${rand.nextInt(1000)}",
-                                      });
-                                },
+                                onPressed: () {},
                                 icon: Icon(Icons.edit),
                               ),
                               IconButton(
-                                onPressed: () {
-                                  // TO_DO : Move this to Repository
-                                  // TO_DO : Use a model
-                                  FirebaseDatabase.instance
-                                      .ref(Lists.members.name)
-                                      .child(
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                      )
-                                      .child(Lists.posts.name)
-                                      .child(post['id']!)
-                                      .remove();
-                                },
+                                onPressed: () {},
                                 icon: Icon(Icons.delete),
                               ),
                             ],
@@ -95,7 +51,16 @@ class PostsScreen extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return Text("No posts found :<");
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("No posts found :<"),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: Text("Add random post"),
+                      ),
+                    ],
+                  );
                 }
               },
             );

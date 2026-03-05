@@ -24,7 +24,6 @@ class HomeScreen extends StatelessWidget {
           no: () => Column(
             mainAxisSize: .min,
             children: [
-              // No user :<
               ElevatedButton(
                 onPressed: () {
                   SignInScreen.push(context);
@@ -43,10 +42,10 @@ class HomeScreen extends StatelessWidget {
             mainAxisSize: .min,
             children: [
               UserData(builder: (context, user) => Text("Name: ${user?.name}")),
-              // Yes user :>
               ElevatedButton(
                 onPressed: () {
                   UserService.instance.signOut();
+                  HomeScreen.go(context);
                 },
                 child: Text("Sign Out"),
               ),
