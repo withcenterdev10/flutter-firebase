@@ -1,3 +1,4 @@
+import 'package:fb_test2/screens/posts/posts.create_post.screen.dart';
 import 'package:fb_test2/widgets/posts/posts.my_posts.dart';
 import 'package:fb_test2/widgets/user/user.ready.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,12 @@ class PostsScreen extends StatelessWidget {
       body: UserReady(
         yes: () => const PostsMyPosts(),
         no: () => const Center(child: Text("Please sign in to see your posts")),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          CreatePostScreen.push(context);
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

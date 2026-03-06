@@ -64,7 +64,7 @@ class PostState extends ChangeNotifier {
 
   // Create
   void createPost(PostModel post) {
-    posts = [...?posts, post];
+    posts = [post, ...?posts];
     notifyListeners();
   }
 }

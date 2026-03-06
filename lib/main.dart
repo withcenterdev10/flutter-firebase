@@ -5,7 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserState>(create: (context) => UserState()),
+        ChangeNotifierProvider<PostState>(create: (context) => PostState()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,12 +21,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserState>(
-      create: (_) => UserState(),
-      child: ChangeNotifierProvider<PostState>(
-        create: (_) => PostState(),
-        child: MaterialApp.router(routerConfig: router),
-      ),
-    );
+    return MaterialApp.router(routerConfig: router);
   }
 }

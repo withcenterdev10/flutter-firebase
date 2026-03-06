@@ -1,5 +1,7 @@
 import 'package:fb_test2/models/post/post.model.dart';
+import 'package:fb_test2/services/post/post.service.dart';
 import 'package:fb_test2/states/post_state.dart';
+import 'package:fb_test2/states/user_state.dart';
 import 'package:fb_test2/widgets/post/post.form.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -28,14 +30,23 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-    final post = PostModel(
+
+    final userId = UserState.of(context).user!.id!;
+    final post = await PostService.instance.createPost(
+      userId: userId,
       title: _titleController.text.trim(),
       body: _bodyController.text.trim(),
     );
-    PostState.of(context).createPost(post);
-    context.pop();
+
+    if (mounted) {
+      PostState.of(context).createPost(post);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Post created successfully")),
+      );
+      context.pop();
+    }
   }
 
   @override
