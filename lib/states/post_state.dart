@@ -5,17 +5,10 @@ import 'package:provider/provider.dart';
 class PostState extends ChangeNotifier {
   bool isLoading = false;
 
-  // All posts (home screen)
   List<PostModel>? posts;
   bool hasMorePosts = true;
   int _postsPage = 1;
   int get postsPage => _postsPage;
-
-  // My posts (posts screen)
-  List<PostModel>? myPosts;
-  bool hasMoreMyPosts = true;
-  int _myPostsPage = 1;
-  int get myPostsPage => _myPostsPage;
 
   // Selected post (detail / edit screen)
   PostModel? selectedPost;
@@ -27,7 +20,6 @@ class PostState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // All posts
   void startFetchingPosts() {
     _postsPage = 1;
     hasMorePosts = true;
@@ -50,29 +42,6 @@ class PostState extends ChangeNotifier {
     _setLoading(false);
   }
 
-  // My posts
-  void startFetchingMyPosts() {
-    _myPostsPage = 1;
-    hasMoreMyPosts = true;
-    myPosts = null;
-    _setLoading(true);
-  }
-
-  void setMyPosts(List<PostModel> newPosts, int total) {
-    myPosts = newPosts;
-    hasMoreMyPosts = newPosts.length < total;
-    _setLoading(false);
-  }
-
-  void startLoadingMoreMyPosts() => _setLoading(true);
-
-  void appendMyPosts(List<PostModel> morePosts, int total, int page) {
-    _myPostsPage = page;
-    myPosts = [...?myPosts, ...morePosts];
-    hasMoreMyPosts = myPosts!.length < total;
-    _setLoading(false);
-  }
-
   // Selected post
   void setSelectedPost(PostModel post) {
     selectedPost = post;
@@ -84,13 +53,11 @@ class PostState extends ChangeNotifier {
   void updateSelectedPost(PostModel updated) {
     selectedPost = updated;
     posts = posts?.map((p) => p.id == updated.id ? updated : p).toList();
-    myPosts = myPosts?.map((p) => p.id == updated.id ? updated : p).toList();
     _setLoading(false);
   }
 
   void removePost(String postId) {
     posts = posts?.where((p) => p.id != postId).toList();
-    myPosts = myPosts?.where((p) => p.id != postId).toList();
     selectedPost = null;
     _setLoading(false);
   }

@@ -1,4 +1,5 @@
 import 'package:fb_test2/models/post/post.model.dart';
+import 'package:fb_test2/utils/string/string.util.dart';
 import 'package:flutter/material.dart';
 
 class PostListItem extends StatelessWidget {
@@ -9,14 +10,24 @@ class PostListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final initials = StringUtil.initials(post.author?.name);
+
     return ListTile(
+      leading: CircleAvatar(child: Text(initials)),
       title: Text(post.title ?? ''),
-      subtitle: Text(
-        post.body ?? '',
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(StringUtil.displayName(post.author?.name)),
+          Text(
+            post.body ?? '',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
       trailing: const Icon(Icons.chevron_right),
+      isThreeLine: true,
       onTap: onTap,
     );
   }

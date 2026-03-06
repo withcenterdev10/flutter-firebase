@@ -328,7 +328,10 @@ Fields returned for a post:
   "title": "My First Post",
   "body": "Hello, world!",
   "created_at": "2026-03-06 10:00:00",
-  "updated_at": "2026-03-06 10:00:00"
+  "updated_at": "2026-03-06 10:00:00",
+  "author_name": "John Doe",
+  "author_email": "user@example.com",
+  "author_gender": "male"
 }
 ```
 
@@ -360,7 +363,10 @@ Requires the author to be logged in. Pass `user_id` in the body — the API chec
     "title": "My First Post",
     "body": "Hello, world!",
     "created_at": "2026-03-06 10:00:00",
-    "updated_at": "2026-03-06 10:00:00"
+    "updated_at": "2026-03-06 10:00:00",
+    "author_name": "John Doe",
+    "author_email": "user@example.com",
+    "author_gender": "male"
   }
 }
 ```
@@ -414,7 +420,10 @@ GET /posts?user_id=acd28705f796c7d9&page=1&limit=10
       "title": "My First Post",
       "body": "Hello, world!",
       "created_at": "2026-03-06 10:00:00",
-      "updated_at": "2026-03-06 10:00:00"
+      "updated_at": "2026-03-06 10:00:00",
+      "author_name": "John Doe",
+      "author_email": "user@example.com",
+      "author_gender": "male"
     }
   ],
   "pagination": {
@@ -446,7 +455,10 @@ GET /posts/b3f1a2c4d5e6f7a8
     "title": "My First Post",
     "body": "Hello, world!",
     "created_at": "2026-03-06 10:00:00",
-    "updated_at": "2026-03-06 10:00:00"
+    "updated_at": "2026-03-06 10:00:00",
+    "author_name": "John Doe",
+    "author_email": "user@example.com",
+    "author_gender": "male"
   }
 }
 ```
@@ -492,7 +504,10 @@ PUT /posts/b3f1a2c4d5e6f7a8
     "title": "Updated Title",
     "body": "Updated content.",
     "created_at": "2026-03-06 10:00:00",
-    "updated_at": "2026-03-06 11:30:00"
+    "updated_at": "2026-03-06 11:30:00",
+    "author_name": "John Doe",
+    "author_email": "user@example.com",
+    "author_gender": "male"
   }
 }
 ```

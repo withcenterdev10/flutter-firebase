@@ -1,3 +1,5 @@
+import 'package:fb_test2/models/post/post.author_model.dart';
+
 class PostModel {
   PostModel({
     this.id,
@@ -6,6 +8,7 @@ class PostModel {
     this.body,
     this.createdAt,
     this.updatedAt,
+    this.author,
   });
 
   final String? id;
@@ -14,6 +17,7 @@ class PostModel {
   final String? body;
   final String? createdAt;
   final String? updatedAt;
+  final PostAuthorModel? author;
 
   PostModel copyWith({
     String? id,
@@ -22,6 +26,7 @@ class PostModel {
     String? body,
     String? createdAt,
     String? updatedAt,
+    PostAuthorModel? author,
   }) {
     return PostModel(
       id: id ?? this.id,
@@ -30,6 +35,7 @@ class PostModel {
       body: body ?? this.body,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      author: author ?? this.author,
     );
   }
 
@@ -41,6 +47,7 @@ class PostModel {
       body: json['body'] as String?,
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
+      author: PostAuthorModel.fromJson(json),
     );
   }
 }

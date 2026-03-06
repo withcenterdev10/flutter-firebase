@@ -33,25 +33,25 @@ class _PostsMyPostsState extends State<PostsMyPosts> {
   Future<void> _loadMyPosts() async {
     final userId = UserState.of(context).user?.id;
     if (userId == null) return;
-    PostState.of(context).startFetchingMyPosts();
+    PostState.of(context).startFetchingPosts();
     final result = await PostService.instance.getPosts(userId: userId);
     if (!mounted) return;
-    PostState.of(context).setMyPosts(result.posts, result.total);
+    PostState.of(context).setPosts(result.posts, result.total);
   }
 
   Future<void> _loadMoreMyPosts() async {
     final state = PostState.of(context);
-    if (!state.hasMoreMyPosts || state.isLoading) return;
+    if (!state.hasMorePosts || state.isLoading) return;
     final userId = UserState.of(context).user?.id;
     if (userId == null) return;
-    final nextPage = state.myPostsPage + 1;
-    state.startLoadingMoreMyPosts();
+    final nextPage = state.postsPage + 1;
+    state.startLoadingMorePosts();
     final result = await PostService.instance.getPosts(
       userId: userId,
       page: nextPage,
     );
     if (!mounted) return;
-    PostState.of(context).appendMyPosts(result.posts, result.total, nextPage);
+    PostState.of(context).appendPosts(result.posts, result.total, nextPage);
   }
 
   void _onScroll() {
@@ -62,7 +62,7 @@ class _PostsMyPostsState extends State<PostsMyPosts> {
   @override
   Widget build(BuildContext context) {
     return Selector<PostState, (bool, List<PostModel>?, bool)>(
-      selector: (_, s) => (s.isLoading, s.myPosts, s.hasMoreMyPosts),
+      selector: (_, s) => (s.isLoading, s.posts, s.hasMorePosts),
       builder: (context, data, _) {
         final (isLoading, posts, _) = data;
 

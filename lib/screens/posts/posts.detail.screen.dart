@@ -1,4 +1,6 @@
 import 'package:fb_test2/models/post/post.model.dart';
+import 'package:fb_test2/utils/date/date.util.dart';
+import 'package:fb_test2/utils/string/string.util.dart';
 import 'package:fb_test2/screens/posts/posts.edit.screen.dart';
 import 'package:fb_test2/services/post/post.service.dart';
 import 'package:fb_test2/states/post_state.dart';
@@ -44,9 +46,9 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     await PostService.instance.deletePost(postId: post.id!, userId: userId);
     if (!mounted) return;
     PostState.of(context).removePost(post.id!);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Post deleted")),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text("Post deleted")));
     context.pop();
   }
 
@@ -64,17 +66,16 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Post"),
             actions: isOwner
                 ? [
                     IconButton(
-                      onPressed:
-                          isLoading ? null : () => EditPostScreen.push(context),
+                      onPressed: isLoading
+                          ? null
+                          : () => EditPostScreen.push(context),
                       icon: const Icon(Icons.edit),
                     ),
                     IconButton(
-                      onPressed:
-                          isLoading ? null : () => _handleDelete(post),
+                      onPressed: isLoading ? null : () => _handleDelete(post),
                       icon: const Icon(Icons.delete),
                     ),
                   ]
@@ -89,10 +90,28 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                   post.title ?? '',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  post.createdAt ?? '',
-                  style: Theme.of(context).textTheme.bodySmall,
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      child: Text(StringUtil.initials(post.author?.name)),
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          StringUtil.displayName(post.author?.name),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        Text(
+                          DateUtil.timeAgo(post.createdAt),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 Text(post.body ?? ''),
