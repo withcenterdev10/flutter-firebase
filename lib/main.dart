@@ -1,4 +1,5 @@
 import 'package:fb_test2/router.dart';
+import 'package:fb_test2/states/post_state.dart';
 import 'package:fb_test2/states/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<UserState>(
       create: (_) => UserState(),
-      child: MaterialApp.router(routerConfig: router),
+      child: ChangeNotifierProvider<PostState>(
+        create: (_) => PostState(),
+        child: MaterialApp.router(routerConfig: router),
+      ),
     );
   }
 }

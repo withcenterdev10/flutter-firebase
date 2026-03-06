@@ -167,12 +167,63 @@ Center(
 
 ## States (ChangeNotifier)
 
-- State files are only about handling state
+- State files are only about handling state — they must NOT call service or repository methods
+- State methods are pure state setters: they receive data and update fields, then call `notifyListeners()`
+- It is the widget/screen that calls the service, then passes the result to the state method:
+
+```dart
+// CORRECT — widget calls service, passes result to state
+Future<void> _loadPosts() async {
+  PostState.of(context).startFetchingPosts();
+  final result = await PostService.instance.getPosts();
+  if (!mounted) return;
+  PostState.of(context).setPosts(result.posts);
+}
+
+// WRONG — state calling a service
+Future<void> fetchPosts() async {
+  final result = await PostService.instance.getPosts(); // ❌ service call inside state
+  posts = result.posts;
+  notifyListeners();
+}
+```
+
 - Each state file should have a matching model
 - State methods should accept models as parameters instead of direct values
 - State classes must have a static `.of()` method that returns `context.read<StateClass>()`
 - State classes must extend `ChangeNotifier`
 - Always use `StateClass.of(context).someMethod()` to update state — never hold a direct reference to the state instance and call methods on it
+- When a StatefulWidget needs to call a state method on mount (e.g., in `initState`), the `ChangeNotifierProvider` must be set up in a parent widget. Use `addPostFrameCallback` inside `initState` to call `StateClass.of(context)` after the first frame:
+
+```dart
+// Parent widget provides the state
+class MyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => MyState(),
+      child: const _MyWidgetBody(),
+    );
+  }
+}
+
+// Child widget uses .of(context) to call state methods
+class _MyWidgetBody extends StatefulWidget { ... }
+class _MyWidgetBodyState extends State<_MyWidgetBody> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadSomething());
+  }
+
+  Future<void> _loadSomething() async {
+    MyState.of(context).startLoading();
+    final result = await MyService.instance.getSomething();
+    if (!mounted) return;
+    MyState.of(context).setData(result);
+  }
+}
+```
 
 Example:
 ```dart

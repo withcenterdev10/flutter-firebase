@@ -1,5 +1,6 @@
 import 'package:fb_test2/screens/sign_in/sign_in.screen.dart';
 import 'package:fb_test2/widgets/home/home.drawer.dart';
+import 'package:fb_test2/widgets/home/home.posts.dart';
 import 'package:fb_test2/widgets/user/user.data.dart';
 import 'package:fb_test2/widgets/user/user.ready.dart';
 import 'package:flutter/material.dart';
@@ -42,9 +43,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text("POSTS"),
-      ),
+      body: const HomePosts(),
     );
   }
 }

@@ -10,6 +10,7 @@ All responses follow a consistent shape:
 - `message`: human-readable string (on failure or simple success)
 - `user` / `users`: data payload (on success)
 - `post` / `posts`: post data payload (on success)
+- `comment` / `comments`: comment data payload (on success)
 
 ---
 
@@ -603,12 +604,293 @@ DELETE /posts/b3f1a2c4d5e6f7a8
 | `PUT`    | `/posts/{id}` | Yes (owner)   | Update post               |
 | `DELETE` | `/posts/{id}` | Yes (owner)   | Delete post               |
 
+### Comment Endpoints
+
+| Method   | Path                            | Auth Required             | Purpose                |
+| -------- | ------------------------------- | ------------------------- | ---------------------- |
+| `POST`   | `/posts/{postId}/comments`      | Yes                       | Create comment         |
+| `GET`    | `/posts/{postId}/comments`      | No                        | Get comments on a post |
+| `GET`    | `/posts/{postId}/comments/{id}` | No                        | Get single comment     |
+| `PUT`    | `/posts/{postId}/comments/{id}` | Yes (owner)               | Update comment         |
+| `DELETE` | `/posts/{postId}/comments/{id}` | Yes (owner or post owner) | Delete comment         |
+
 ---
 
-## Flutter Usage Notes
+## Comment Object
 
-- Store the user `id` locally (e.g. `SharedPreferences`) after login to use in subsequent requests.
-- The `is_logged_in` field from GET endpoints returns as an integer (`0`/`1`). Cast with `isLoggedIn == 1` or `isLoggedIn == true` depending on the response origin.
-- All endpoints accept and return UTF-8 JSON. Set `Content-Type: application/json` on every request that has a body.
-- On login success, persist the full user object locally. On logout, clear local storage.
-- For post write operations (create, update, delete), always include the stored `user_id` in the request body — there are no session cookies or tokens.
+Fields returned for a comment:
+
+```json
+{
+  "id": "c1d2e3f4a5b6c7d8",
+  "post_id": "b3f1a2c4d5e6f7a8",
+  "user_id": "acd28705f796c7d9",
+  "body": "Great post!",
+  "created_at": "2026-03-06 10:05:00",
+  "updated_at": "2026-03-06 10:05:00"
+}
+```
+
+---
+
+### 13. Create Comment — `POST /posts/{postId}/comments`
+
+Requires the commenter to be logged in.
+
+```
+POST /posts/b3f1a2c4d5e6f7a8/comments
+```
+
+**Request body:**
+
+```json
+{
+  "user_id": "acd28705f796c7d9", // required — must be logged in
+  "body": "Great post!" // required
+}
+```
+
+**Success `200`:**
+
+```json
+{
+  "status": "success",
+  "message": "Comment created successfully",
+  "comment": {
+    "id": "c1d2e3f4a5b6c7d8",
+    "post_id": "b3f1a2c4d5e6f7a8",
+    "user_id": "acd28705f796c7d9",
+    "body": "Great post!",
+    "created_at": "2026-03-06 10:05:00",
+    "updated_at": "2026-03-06 10:05:00"
+  }
+}
+```
+
+**Failure — missing fields:**
+
+```json
+{
+  "status": "failed",
+  "message": "These fields are required. (post_id, user_id, body)"
+}
+```
+
+**Failure — not logged in:**
+
+```json
+{
+  "status": "failed",
+  "message": "Unauthorized"
+}
+```
+
+**Failure — post not found:**
+
+```json
+{
+  "status": "failed",
+  "message": "Post not found"
+}
+```
+
+---
+
+### 14. Get Comments on a Post — `GET /posts/{postId}/comments`
+
+Public. Returns all comments for the given post, oldest first, with pagination.
+
+```
+GET /posts/b3f1a2c4d5e6f7a8/comments?page=1&limit=10
+```
+
+**Query parameters:**
+
+| Param   | Required | Default | Description    |
+| ------- | -------- | ------- | -------------- |
+| `page`  | No       | `1`     | Page number    |
+| `limit` | No       | `10`    | Items per page |
+
+**Success `200`:**
+
+```json
+{
+  "status": "success",
+  "comments": [
+    {
+      "id": "c1d2e3f4a5b6c7d8",
+      "post_id": "b3f1a2c4d5e6f7a8",
+      "user_id": "acd28705f796c7d9",
+      "body": "Great post!",
+      "created_at": "2026-03-06 10:05:00",
+      "updated_at": "2026-03-06 10:05:00"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 5
+  }
+}
+```
+
+**Failure — post not found:**
+
+```json
+{
+  "status": "failed",
+  "message": "Post not found"
+}
+```
+
+---
+
+### 15. Get Single Comment — `GET /posts/{postId}/comments/{id}`
+
+Public. No auth required.
+
+```
+GET /posts/b3f1a2c4d5e6f7a8/comments/c1d2e3f4a5b6c7d8
+```
+
+**Success `200`:**
+
+```json
+{
+  "status": "success",
+  "comment": {
+    "id": "c1d2e3f4a5b6c7d8",
+    "post_id": "b3f1a2c4d5e6f7a8",
+    "user_id": "acd28705f796c7d9",
+    "body": "Great post!",
+    "created_at": "2026-03-06 10:05:00",
+    "updated_at": "2026-03-06 10:05:00"
+  }
+}
+```
+
+**Failure — not found:**
+
+```json
+{
+  "status": "failed",
+  "message": "Comment not found"
+}
+```
+
+---
+
+### 16. Update Comment — `PUT /posts/{postId}/comments/{id}`
+
+Only the comment's author (logged in) can update it.
+
+```
+PUT /posts/b3f1a2c4d5e6f7a8/comments/c1d2e3f4a5b6c7d8
+```
+
+**Request body:**
+
+```json
+{
+  "user_id": "acd28705f796c7d9", // required — must be logged in
+  "body": "Updated comment." // required
+}
+```
+
+**Success `200`:**
+
+```json
+{
+  "status": "success",
+  "message": "Comment updated successfully",
+  "comment": {
+    "id": "c1d2e3f4a5b6c7d8",
+    "post_id": "b3f1a2c4d5e6f7a8",
+    "user_id": "acd28705f796c7d9",
+    "body": "Updated comment.",
+    "created_at": "2026-03-06 10:05:00",
+    "updated_at": "2026-03-06 11:00:00"
+  }
+}
+```
+
+**Failure — not logged in:**
+
+```json
+{
+  "status": "failed",
+  "message": "Unauthorized"
+}
+```
+
+**Failure — editing another user's comment:**
+
+```json
+{
+  "status": "failed",
+  "message": "Forbidden"
+}
+```
+
+**Failure — not found:**
+
+```json
+{
+  "status": "failed",
+  "message": "Comment not found"
+}
+```
+
+---
+
+### 17. Delete Comment — `DELETE /posts/{postId}/comments/{id}`
+
+The comment's author **or** the post's author can delete a comment.
+
+```
+DELETE /posts/b3f1a2c4d5e6f7a8/comments/c1d2e3f4a5b6c7d8
+```
+
+**Request body:**
+
+```json
+{
+  "user_id": "acd28705f796c7d9" // required — must be logged in
+}
+```
+
+**Success `200`:**
+
+```json
+{
+  "status": "success",
+  "message": "Comment deleted successfully"
+}
+```
+
+**Failure — not logged in:**
+
+```json
+{
+  "status": "failed",
+  "message": "Unauthorized"
+}
+```
+
+**Failure — neither comment owner nor post owner:**
+
+```json
+{
+  "status": "failed",
+  "message": "Forbidden"
+}
+```
+
+**Failure — not found:**
+
+```json
+{
+  "status": "failed",
+  "message": "Comment not found"
+}
+```
